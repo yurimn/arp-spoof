@@ -2,10 +2,9 @@
 #include <cstdint>
 #include "ip.h"
 
-/*
- *  IPv4 header
- *  Ref : http://packetfactory.openwall.net/projects/libnet/
- */
+ //IPv4 header
+// Ref : http://packetfactory.openwall.net/projects/libnet/
+ 
 struct IPv4Hdr
 {
     uint8_t ip_hl:4,            /* header length */

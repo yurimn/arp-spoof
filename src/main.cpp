@@ -200,14 +200,13 @@ int main(int argc, char* argv[]) {
 			arp_spoof();
 
 		}
-		else {
-			continue;
-		}
+		else continue;
+		
 	}
 
 	int status;
-	for (int i=1; i< argc/2 ; i++) {
-	wait(&status); 
+	for (int i=1; i<len; i++) {
+		wait(&status); 
 	}
     
 	pcap_close(handle);
