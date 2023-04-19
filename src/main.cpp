@@ -36,14 +36,12 @@ void usage() {
 }
 
 void getAttackerInfo(string interface, Mac& attackerMac, Ip& attackerIp ) {
-    //get Mac Address
     ifstream fp ("/sys/class/net/" + interface + "/address");
     string macaddr;
     fp >> macaddr;
     fp.close();
     attackerMac = macaddr;
 
-    // get IP Address
     int s = socket(AF_INET, SOCK_DGRAM, 0);
     ifreq ifr;
     ifr.ifr_addr.sa_family = AF_INET;
@@ -53,7 +51,6 @@ void getAttackerInfo(string interface, Mac& attackerMac, Ip& attackerIp ) {
 
     string ipaddr = inet_ntoa(((sockaddr_in *) &ifr.ifr_addr) -> sin_addr);
     attackerIp = Ip(ipaddr);
-
 }
 
 void sendARPPacket(pcap_t* handle, Mac& eth_dmac, Mac& eth_smac, Mac& arp_smac, Ip& arp_sip, Mac& arp_tmac, Ip& arp_tip, bool isRequest ){
@@ -63,7 +60,6 @@ void sendARPPacket(pcap_t* handle, Mac& eth_dmac, Mac& eth_smac, Mac& arp_smac, 
 	packet.eth_.dmac_ = eth_dmac;
 	packet.eth_.smac_ = eth_smac;
 	packet.eth_.type_ = htons(EthHdr::Arp);
-
 	packet.arp_.hrd_ = htons(ArpHdr::ETHER);
 	packet.arp_.pro_ = htons(EthHdr::Ip4);
 	packet.arp_.hln_ = Mac::SIZE;
@@ -75,6 +71,7 @@ void sendARPPacket(pcap_t* handle, Mac& eth_dmac, Mac& eth_smac, Mac& arp_smac, 
 	packet.arp_.tip_ = htonl(arp_tip);
 
 	int res = pcap_sendpacket(handle, reinterpret_cast<const u_char*>(&packet), sizeof(EthArpPacket));
+	
 	if (res != 0) {
 		fprintf(stderr, "pcap_sendpacket return %d error=%s\n", res, pcap_geterr(handle));
 	}
@@ -105,7 +102,7 @@ int main(int argc, char* argv[]) {
 	int len = argc/2;
 	if (argc < 4 || argc %2  != 0 ) {
 		usage();
-		return -1;
+		return 0;
 	}
 
 	Mac attackerMac, senderMac, targetMac;
